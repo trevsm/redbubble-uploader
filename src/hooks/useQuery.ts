@@ -1,5 +1,6 @@
 import { readFileSync } from "fs"
 import { request } from "graphql-request"
+import { deleteCookie } from "../misc"
 import { urls } from "../urls"
 
 export const useQuery = async (
@@ -17,7 +18,13 @@ export const useQuery = async (
     .then((data) => ({
       data
     }))
-    .catch((error) => ({
-      error
-    }))
+    .catch((error) => {
+      if (error.toString().includes("Unauthorized")) {
+        console.log("Unauthorized...")
+        deleteCookie()
+      }
+      return {
+        error
+      }
+    })
 }
