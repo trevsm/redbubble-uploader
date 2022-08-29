@@ -1,11 +1,12 @@
-import express from 'express';
+import { startSession } from "./auth/auth"
+import { useGetInventoryItems } from "./graphql/withDefaultInventoryItems"
 
-const app = express();
+async function main() {
+  await startSession()
+  const { data, error } = await useGetInventoryItems(123456789)
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+  if (data) console.log(data)
+  if (error) console.log(error)
+}
 
-app.listen(3000, () => {
-  console.log('The application is listening on port 3000!');
-});
+main()
